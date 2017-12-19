@@ -5,7 +5,7 @@ class TodoList extends React.Component {
     super(props);
     this.state = {}
 
-    this.handleEdit = this.handleEdit.bind(this);
+    // console.log(this.props.todo);
   }
 
   render() {
@@ -13,16 +13,13 @@ class TodoList extends React.Component {
       <div>
         <p>Task: {this.props.todo.task }</p>
         <p>Details: {this.props.todo.details }</p>
-        <p>Tags: { this.props.todo.tags }</p>
-        <button onClick={()=>this.props.onEdit(this.props.todo)}>Edit</button><button onClick={()=>this.props.onDelete(this.props.todo.ind)}>Delete</button>
+        <p>Tags: { this.props.todo.tags[0].name }</p>
+        <button onClick={()=>this.props.onEdit(this.props.todo)}>Edit</button><button onClick={()=>this.props.onDelete(this.props.todo.id)}>Delete</button>
         <hr />
       </div>
     );
   }
 
-  handleEdit() {
-
-  }
 }
 
 export default TodoList;
