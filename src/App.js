@@ -1,16 +1,9 @@
-import axios from 'axios';
 import React from 'react';
 import NewTodo from './components/NewTodo';
 import TodoList from './components/TodoList';
-
-var todoAxiosInstance = axios.create({
-  baseURL: 'http://localhost:8000/api',
-  timeout: 50000,
-  headers: {}
-});
+import axiosInstance from './config';
 
 let accToken = '';
-// let refToken = '';
 
 class TodoDisplay extends React.Component {
   constructor() {
@@ -31,26 +24,29 @@ class TodoDisplay extends React.Component {
 
   componentWillMount(){
     accToken = localStorage.getItem('accToken');
-    if (!accToken) {
-      todoAxiosInstance({
-        method: 'post',
-        url: '/auth/login',
-        data: {
-          "username": "saugat",
-          "password": "saugatbro"
-        }
-      }).then(response => {
-        accToken = response.data.data.acessToken;
-        localStorage.setItem('refToken', response.data.data.refreshToken);
-        localStorage.setItem('accToken', response.data.data.acessToken);
-      }).then(()=> this.getTodos()).catch(err => console.log(err));
-    } else {
+    // console.log("login pahile");
+    // if (!accToken) {
+    //   // console.log("tespachhi");
+    //   axiosInstance({
+    //     method: 'post',
+    //     url: '/auth/login',
+    //     data: {
+    //       "username": "saugat",
+    //       "password": "saugatbro"
+    //     }
+    //   }).then(response => {
+    //     // console.log(response);
+    //     accToken = response.data.data.acessToken;
+    //     localStorage.setItem('refToken', response.data.data.refreshToken);
+    //     localStorage.setItem('accToken', response.data.data.acessToken);
+    //   }).then(()=> this.getTodos()).catch(err => console.log(err));
+    // } else {
       this.getTodos();
-    }
+    // }
   }
 
   getTodos() {
-      todoAxiosInstance({
+      axiosInstance({
         method: 'get',
         url: '/todos',
         headers : {
@@ -82,7 +78,7 @@ class TodoDisplay extends React.Component {
   addNewTodo(task, details, tags, id='nan') {
     console.log(tags, parseInt(tags));
       if (id === 'nan') {
-        todoAxiosInstance({
+        axiosInstance({
           method: 'post',
           url: '/todos',
           headers : {
@@ -99,7 +95,7 @@ class TodoDisplay extends React.Component {
           this.getTodos();
         }).catch(err => console.log(err));
       }else {
-        todoAxiosInstance({
+        axiosInstance({
           method: 'put',
           url: '/todos/'+id,
           headers: {
@@ -119,7 +115,7 @@ class TodoDisplay extends React.Component {
     }
 
   deleteTodoAtIndex(id) {
-    todoAxiosInstance({
+    axiosInstance({
       method: 'delete',
       url: '/todos/'+id,
       headers: {
