@@ -30,17 +30,23 @@ class TodoDisplay extends React.Component {
   }
 
   componentWillMount(){
-    todoAxiosInstance({
-      method: 'post',
-      url: '/auth/login',
-      data: {
-        "username": "saugat",
-        "password": "saugatbro"
-      }
-    }).then(response => {
-      accToken = response.data.data.acessToken;
-      // refToken = response.data.data.refreshToken;
-    }).then(()=> this.getTodos()).catch(err => console.log(err));
+    accToken = localStorage.getItem('accToken');
+    if (!accToken) {
+      todoAxiosInstance({
+        method: 'post',
+        url: '/auth/login',
+        data: {
+          "username": "saugat",
+          "password": "saugatbro"
+        }
+      }).then(response => {
+        accToken = response.data.data.acessToken;
+        localStorage.setItem('refToken', response.data.data.refreshToken);
+        localStorage.setItem('accToken', response.data.data.acessToken);
+      }).then(()=> this.getTodos()).catch(err => console.log(err));
+    } else {
+      this.getTodos();
+    }
   }
 
   getTodos() {
